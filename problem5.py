@@ -31,5 +31,42 @@ print(f"MaxY= {maxy}")
 
 grid = [[0 for ycoord in range(maxy+1)] for xcoord in range(maxx+1)]
 
-print(f"{grid}")
+for vent in coords:
+    xiterator = 0 
+    if vent[2] > vent[0]:
+        xiterator = 1
+    elif vent[2] < vent[0]:
+        xiterator = -1
+
+    yiterator = 0 
+    if vent[3] > vent[1]:
+        yiterator = 1
+    elif vent[3] < vent[1]:
+        yiterator = -1        
+
+    xpen = vent[0]
+    ypen = vent[1]
+    #finished = True if (xiterator != 0) and (yiterator != 0) else False
+    finished = False
+    
+    while finished==False:
+        
+        grid[xpen][ypen] += 1
+        if xpen == vent[2] and ypen == vent[3]:
+            finished = True
+
+        #print(f"{xpen}-{ypen} = {grid[xpen][ypen]}")
+        xpen += xiterator
+        ypen += yiterator
+        
+count = 0
+
+for row in grid:
+    for element in row:
+        if element > 1:
+            count += 1
+    
+
+print(f"{count}")
+
 
