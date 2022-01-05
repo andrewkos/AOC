@@ -60,9 +60,10 @@ def evolve_state(remainingDays:int):
         state = newState
         #count_fish()
         evolve_state(remainingDays-1)
-time.sleep(2)
-#result = timeit.timeit(lambda:evolve_state(256),number=1 )
-result = evolve_state(256)
+
+
+result = timeit.timeit(lambda:evolve_state(256),number=1 )
+#result = evolve_state(256)
 print(f"{result}")
 count_fish()
 
