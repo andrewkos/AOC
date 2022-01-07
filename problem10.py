@@ -24,6 +24,11 @@ scores = {")": 3,
           "}": 1197,
           ">": 25137}
 
+scores_2 = {")": 1,
+            "]": 2,
+            "}": 3,
+            ">": 4}
+
 a = read_text("Input10.txt").splitlines()
 
 class chunk():
@@ -31,6 +36,7 @@ class chunk():
         self.open_symbol = None
         self.close_symbol = None
         self.parent = None
+        self.is_corrupt = False
         self.children = []
 
     def check(self):
@@ -51,9 +57,31 @@ class chunk():
                         #print("here")
                         score += child.check_self_and_children()
 
+        if score != 0:
+            self.is_corrupt = True
+
         return score
 
+    def autocomplete(self):
+        if self.close_symbol is None:
+            return pairs[self.open_symbol]
+        else:
+            return ""
+
+    def autocomplete_self_and_children(self):
+
+        output = ""
+
+        for child in self.children:
+                   output += child.autocomplete_self_and_children()
+        
+        output += self.autocomplete()
+
+        return output
+
+
 score = 0
+score_2_autocompletes = []
 
 for str in a:
 
@@ -77,7 +105,31 @@ for str in a:
             
 
     score += start_chunk.check_self_and_children()
+    if start_chunk.is_corrupt == False:
+        score_2_autocompletes.append(start_chunk.autocomplete_self_and_children())
 
-print(f"{score}")
-
+def score_strings(s:str):
+    score = 0
+    for e in s:
+        lookup = scores_2[e]    
+        score = score*5 + lookup
+        print(f"{e},{lookup},{score}")
         
+    return score
+
+scores_2_results = [score_strings(s) for s in score_2_autocompletes]
+
+
+test = score_strings("])}>")
+
+print(f"test = {test}")
+
+#print(f"{score_2_autocompletes}")        
+#print(f"{scores_2_results}")        
+
+scores_2_sorted = scores_2_results.copy()
+scores_2_sorted.sort()
+
+
+print(f"{scores_2_sorted}")        
+print(f"{scores_2_sorted[len(scores_2_sorted)//2]}")
